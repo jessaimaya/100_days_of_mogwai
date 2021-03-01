@@ -45,7 +45,7 @@ impl Component for App {
             <div
                 class=self.style.clone().get_class_name()
                 on:click=tx.contra_map(|_| AppModel::Click)>
-                <p>
+                <p class="my-color">
                     {(
                         "Hello from mogwai!",
                         rx.branch_map(|msg| {
@@ -70,7 +70,7 @@ pub fn main() -> Result<(), JsValue> {
         "Component", // The class prefix
         // The actual css
         r#"
-                background-color: red;
+            color: white;
                 "#,
     ) {
         Ok(style) => style,
