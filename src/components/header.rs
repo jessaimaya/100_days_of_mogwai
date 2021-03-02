@@ -1,14 +1,15 @@
 use mogwai::prelude::*;
 use css_in_rust::*;
+
 use crate::theme::Theme;
 
-pub fn render_header(theme: &Theme) -> ViewBuilder<HtmlElement> {
+pub fn render_header() -> ViewBuilder<HtmlElement> {
     let style = match css_in_rust::Style::create(
         "header",
         format!("
             color: white;
             background: {};
-                ", theme.background.dark),
+                ", Theme.background.light),
     ) {
         Ok(style) => style,
         Err(error) => {

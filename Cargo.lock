@@ -193,6 +193,7 @@ dependencies = [
  "console_log",
  "css-colors",
  "css-in-rust",
+ "lazy_static",
  "log",
  "mogwai",
  "serde",

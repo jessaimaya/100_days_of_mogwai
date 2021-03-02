@@ -45,8 +45,7 @@ impl Component for App {
     }
 
     fn view(&self, tx: &Transmitter<AppModel>, rx: &Receiver<AppView>) -> ViewBuilder<HtmlElement> {
-        let theme = Theme::default();
-        containers::layout::set_layout(&theme)
+        containers::layout::set_layout()
     }
 }
 
