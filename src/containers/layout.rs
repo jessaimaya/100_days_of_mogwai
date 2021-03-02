@@ -1,0 +1,18 @@
+use mogwai::prelude::*;
+
+use crate::components::{header, footer};
+use crate::theme::Theme;
+
+pub fn set_layout(theme: &Theme) -> ViewBuilder<HtmlElement> {
+    let header = header::render_header(theme);
+    let footer = footer::render_footer();
+    builder!(
+        <div class="App">
+            {header}
+            <main>
+                <p>"Main content"</p>
+            </main>
+            {footer}
+        </div>
+    )
+}

@@ -1,4 +1,4 @@
-use css_colors::{Color, RGB, rgb};
+use css_colors::{RGB, rgb};
 
 #[derive(Copy, Clone, Debug)]
 pub struct Theme {
