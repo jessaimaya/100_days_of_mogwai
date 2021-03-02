@@ -30,6 +30,7 @@ console_error_panic_hook = { version = "0.1.6", optional = true }
 # Unfortunately, `wee_alloc` requires nightly Rust when targeting wasm for now.
 wee_alloc = { version = "0.4.2", optional = true }
 css-in-rust = "0.5.0"
+css-colors = "1.0.1"
 
 [dependencies.mogwai]
 version = "^0.3"

@@ -4,6 +4,8 @@ use std::panic;
 use wasm_bindgen::prelude::*;
 // use css_in_rust::style;
 
+mod theme;
+use crate::theme::Theme;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
@@ -66,18 +68,21 @@ pub fn main() -> Result<(), JsValue> {
     panic::set_hook(Box::new(console_error_panic_hook::hook));
     console_log::init_with_level(Level::Trace).unwrap();
 
+    let theme = Theme::default();
     let style = match css_in_rust::Style::create(
         "Component", // The class prefix
         // The actual css
-        r#"
+        format!("
             color: white;
-                "#,
+            background: {};
+                ", theme.background.dark),
     ) {
         Ok(style) => style,
         Err(error) => {
             panic!("An error occured while creating the style: {}", error);
         }
     };
+
     let gizmo = Gizmo::from(App{ clicks: 0, style });
     let view = View::from(gizmo.view_builder());
     view.run()

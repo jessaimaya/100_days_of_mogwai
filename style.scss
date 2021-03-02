@@ -1,7 +1,30 @@
+/*
+*
+* Sanitize
+*
+*/
 @import url(~sanitize.css);
 
-$col: palevioletred;
+/*
+*
+* Theme
+*
+*/
+
+$theme-colors: (
+        'foreground': (
+                'light': #94B08A,
+                'dark': #132628
+        ),
+        'background': (
+                'light': #94B08A,
+                'dark': #132628
+        ),
+        'accent': (
+                'light': #F8B189,
+                'dark': #91354F
+        )
+);
 
 .my-color {
-  background: $col;
 }
