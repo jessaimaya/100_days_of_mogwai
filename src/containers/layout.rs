@@ -1,19 +1,26 @@
 use mogwai::prelude::*;
+use chrono::prelude::*;
 
-use crate::components::{header, footer};
-use crate::theme::Theme;
+use crate::components::clock::Clock;
+use crate::theme::THEME;
 
 pub fn set_layout() -> ViewBuilder<HtmlElement> {
-    let tx_click:Transmitter<Event> =Transmitter::new();
-    let header = header::render_header(tx_click.clone());
-    let footer = footer::render_footer(tx_click);
+    let style = css_in_rust::Style::create(
+        "App",
+        r#"
+            display: grid;
+            text-align: center;
+            background-color: #282c34;
+            align-content: center;
+        "#
+    );
+    let c = Gizmo::from(Clock{ time: Utc::now() });
+
     builder!(
-        <div class="App">
-            {header}
+        <div class=style.unwrap().get_class_name() >
             <main>
-                <p>"Main content"</p>
+                {c.view_builder()}
             </main>
-            {footer}
         </div>
     )
 }

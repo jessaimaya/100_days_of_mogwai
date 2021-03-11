@@ -7,24 +7,59 @@
 
 /*
 *
-* Theme
+*  Theme
+*
+*/
+$black: #282c34;
+
+
+/*
+*
+*  Global
+*
+*/
+* {
+  box-sizing: border-box;
+}
+body, html {
+  min-height: 100vh;
+}
+body {
+  display: grid;
+  padding: 0.5rem;
+  align-items: stretch;
+  font-size: calc(10px + 2vmin);
+}
+
+
+/*
+*
+*  Clock
 *
 */
 
-$theme-colors: (
-        'foreground': (
-                'light': #94B08A,
-                'dark': #132628
-        ),
-        'background': (
-                'light': #94B08A,
-                'dark': #132628
-        ),
-        'accent': (
-                'light': #F8B189,
-                'dark': #91354F
-        )
-);
+.clock {
+  display: grid;
+  text-align: center;
+  background: $black;
 
-.my-color {
+  p {
+    color: white;
+  }
+  .greet {
+    color: white;
+    margin: 0;
+    & span {
+      text-transform: capitalize;
+    }
+  }
+  .evening {
+    color: purple;
+  }
+  .afternoon {
+    color: yellow;
+  }
+  .morning {
+    color: turquoise;
+  }
 }
