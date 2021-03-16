@@ -61,16 +61,16 @@ impl Component for Clock {
         let greet_msg = rx.branch_map(move |msg| match msg {
             Out::Time(t) => greet(*t),
         });
+
+        let date_string = rx.branch_map(move |msg| match msg {
+            Out::Time(t) => date_to_string(*t),
+        });
         /// For testing purpose, we can pass a custom timestamp
         /// let fake:DateTime<Utc> = DateTime::from_utc(NaiveDateTime::from_timestamp(1615473738, 0), Utc);
         builder!{
             <div class="clock">
-                <p class="greet">"Good "<span class={greet_msg.clone()}>{greet_msg}</span></p>
-                <p class="date" >
-                    {rx.branch_map(move |msg| match msg {
-                        Out::Time(t) => date_to_string(*t),
-                    })}
-                </p>
+                <p class="greet">"Good "<span class={greet_msg.clone()}>{("Time!", greet_msg)}</span></p>
+                <p class="date" >{("loading...", date_string)}</p>
             </div>
         }
     }
