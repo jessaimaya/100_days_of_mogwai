@@ -13,7 +13,7 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 #[derive(Clone, Debug, PartialEq)]
 pub enum Route {
     Home,
-    Facebook,
+    Login,
     Settings,
 }
 
@@ -34,7 +34,7 @@ impl TryFrom<&str> for Route {
         match paths.as_slice() {
             [""] => Ok(Route::Home),
             ["", ""] => Ok(Route::Home),
-            ["", "facebook"] => Ok(Route::Facebook),
+            ["", "Login"] => Ok(Route::Login),
             ["", "settings"] => Ok(Route::Settings),
             r => Err(format!("unsupported route: {:?}", r)),
         }
@@ -45,7 +45,7 @@ impl From<Route> for String {
     fn from(route: Route) -> String {
         match route {
             Route::Home => "#/".into(),
-            Route::Facebook => "#/facebook".into(),
+            Route::Login => "#/Login".into(),
             Route::Settings=> "#/settings".into(),
         }
     }
@@ -62,7 +62,7 @@ impl From<&Route> for ViewBuilder<HtmlElement> {
                     </main>
                 }
             },
-            Route::Facebook => builder!{<div><h1>"Facebook"</h1></div>},
+            Route::Login => builder!{<div><h1>"Login"</h1></div>},
             Route::Settings => builder!{<div><h1>"Settings"</h1></div>},
         }
     }

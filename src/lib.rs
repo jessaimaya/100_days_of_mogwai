@@ -9,6 +9,7 @@ use std::time::{Duration, Instant};
 use std::thread::sleep;
 use crate::AppView::PatchPage;
 use crate::router::Route;
+use crate::components::nav::Nav;
 
 mod theme;
 mod containers;
@@ -68,7 +69,7 @@ impl Component for App {
                             let view = View::from(ViewBuilder::from(&route));
                             self.route = route;
                             tx.send(&AppView::PatchPage(Patch::Replace {
-                                index: 2,
+                                index: 1,
                                 value: view,
                             }));
                         }
@@ -79,6 +80,7 @@ impl Component for App {
     }
 
     fn view(&self, tx: &Transmitter<AppModel>, rx: &Receiver<AppView>) -> ViewBuilder<HtmlElement> {
+        let nav = Gizmo::from(Nav{ is_showing: false });
         let style = css_in_rust::Style::create(
             "App",
             r#"
@@ -97,16 +99,7 @@ impl Component for App {
                 })
                 patch:children=rx.branch_filter_map(AppView::patch_page)
             >
-                <nav>
-                    <ul>
-                        <li>
-                            <a href=String::from(Route::Home)>"Home"</a>
-                        </li>
-                    </ul>
-                    <li>
-                        <a href=String::from(Route::Facebook)>"Facebook"</a>
-                    </li>
-                </nav>
+                {nav.view_builder()}
                 <div class=style.unwrap().get_class_name() >
                     <main>
                         {ViewBuilder::from(&self.route)}
