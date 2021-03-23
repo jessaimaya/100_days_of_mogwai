@@ -2,6 +2,7 @@ use mogwai::prelude::*;
 use chrono::prelude::*;
 
 use crate::components::clock::Clock;
+use crate::components::nav::Nav;
 use crate::theme::THEME;
 
 pub fn set_layout() -> ViewBuilder<HtmlElement> {
@@ -15,12 +16,14 @@ pub fn set_layout() -> ViewBuilder<HtmlElement> {
         "#
     );
     let c = Gizmo::from(Clock{ time: Utc::now() });
+    let nav = Gizmo::from(Nav{ is_showing: false });
 
     builder!(
-        <div class=style.unwrap().get_class_name() >
-            <main>
+        <section class=style.unwrap().get_class_name() >
+            {nav.view_builder()}
+            <main role="main">
                 {c.view_builder()}
             </main>
-        </div>
+        </section>
     )
 }

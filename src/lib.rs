@@ -3,18 +3,21 @@ use log::info;
 use mogwai::prelude::*;
 use std::panic;
 use wasm_bindgen::prelude::*;
+use chrono::prelude::*;
 use web_sys::HashChangeEvent;
 
 use std::time::{Duration, Instant};
 use std::thread::sleep;
 use crate::AppView::PatchPage;
 use crate::router::Route;
-use crate::components::nav::Nav;
 
 mod theme;
 mod containers;
 mod components;
 mod router;
+
+use crate::components::clock::Clock;
+use crate::components::nav::Nav;
 
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
@@ -80,7 +83,6 @@ impl Component for App {
     }
 
     fn view(&self, tx: &Transmitter<AppModel>, rx: &Receiver<AppView>) -> ViewBuilder<HtmlElement> {
-        let nav = Gizmo::from(Nav{ is_showing: false });
         let style = css_in_rust::Style::create(
             "App",
             r#"
@@ -90,23 +92,23 @@ impl Component for App {
             align-content: center;
         "#
         );
+        let c = Gizmo::from(Clock{ time: Utc::now() });
+        let nav = Gizmo::from(Nav{ is_showing: false });
         builder!{
-            <slot
+            <section
                 window:hashchange=tx.contra_filter_map(|ev:&Event| {
                     let hev = ev.dyn_ref::<HashChangeEvent>().unwrap().clone();
                     let hash = hev.new_url();
                     Some(AppModel::HashChange(hash))
                 })
                 patch:children=rx.branch_filter_map(AppView::patch_page)
+                class=style.unwrap().get_class_name()
             >
                 {nav.view_builder()}
-                <div class=style.unwrap().get_class_name() >
-                    <main>
-                        {ViewBuilder::from(&self.route)}
-                        <pre>{rx.branch_filter_map(AppView::error)}</pre>
-                    </main>
-                </div>
-            </slot>
+                <main role="main">
+                    {c.view_builder()}
+                </main>
+            </section>
         }
         //containers::layout::set_layout()
     }

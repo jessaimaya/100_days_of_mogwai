@@ -1,9 +1,10 @@
 use log::info;
 use mogwai::prelude::*;
 use mogwai::component::subscriber::Subscriber;
-use web_sys::HtmlElement;
+use web_sys::{HtmlElement, Element};
 
 use crate::router;
+use mogwai::prelude::EventTargetType::Document;
 
 #[derive(Clone)]
 pub enum NavModel {
@@ -32,11 +33,20 @@ impl Component for Nav {
     }
 
     fn view(&self, tx: &Transmitter<Self::ModelMsg>, rx: &Receiver<Self::ViewMsg>) -> ViewBuilder<Self::DomNode> {
-        let css_open = rx.branch_map(|msg| {
-           match msg {
+        let default_class = "cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left";
+        let menu_class = rx.branch_map(move |msg| {
+            let body = web_sys::Element::from(body());
+            let class = "cbp-spmenu-push-toright";
+            match msg {
                NavView::ShowHide(flag) => match *flag {
-                   true => format!("0"),
-                   false => format!("-240px")
+                   true => {
+                       body.class_list().add_1(class);
+                       format!("{} {}", default_class, "cbp-spmenu-open")
+                   },
+                   false => {
+                       body.class_list().remove_1(class);
+                       format!("{}", default_class)
+                   }
                }
            }
         });
@@ -53,11 +63,9 @@ impl Component for Nav {
                     "Menu"
                 </button>
                 <nav
-                    class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left"
+                    class=(default_class, menu_class)
                     id="cbp-spmenu-s1"
-                    style:left = ("-240px", css_open)
                 >
-                    <h3>"Menu"</h3>
                     <a href=String::from(router::Route::Home)>"Home"</a>
                     <a href=String::from(router::Route::Login)>"Login"</a>
                 </nav>

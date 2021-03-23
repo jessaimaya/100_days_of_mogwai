@@ -30,7 +30,16 @@ body {
   align-items: stretch;
   font-size: calc(10px + 2vmin);
 }
-
+.pushable {
+  position: relative;
+  overflow-x: hidden;
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+}
+.cbp-spmenu-push-toright {
+  left: 240px;
+}
 /*
 *
 *  Menu
@@ -79,22 +88,27 @@ body {
   padding: 1em;
 }
 
+.cbp-spmenu-left {
+  left: -240px;
+}
+
+.cbp-spmenu-left.cbp-spmenu-open {
+  left: 0px;
+}
+
 .cbp-spmenu-push {
   overflow-x: hidden;
   position: relative;
   left: 0;
 }
 
-.cbp-spmenu-push-toright {
-  left: 240px;
-}
-
 .cbp-spmenu-push-toleft {
   left: -240px;
 }
 
+
 .cbp-spmenu,
-.cbp-spmenu-push {
+.cbp-spmenu-push-toright,{
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   transition: all 0.3s ease;
@@ -112,13 +126,6 @@ body {
     left: -190px;
   }
 
-  .cbp-spmenu-right {
-    right: -190px;
-  }
-
-  .cbp-spmenu-push-toright {
-    left: 190px;
-  }
 }
 
 /*

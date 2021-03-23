@@ -46,6 +46,8 @@ version = "0.3.48"
 features = [
   "HtmlInputElement",
   "HashChangeEvent",
+  "Element",
+  "DomTokenList"
 ]
 
 [dev-dependencies]
