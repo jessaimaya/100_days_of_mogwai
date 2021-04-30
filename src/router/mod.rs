@@ -6,6 +6,8 @@ use wasm_bindgen::prelude::*;
 use web_sys::HashChangeEvent;
 use crate::components::clock::Clock;
 use chrono::Utc;
+
+use crate::containers::login::Login;
 #[cfg(feature = "weee_alloc")]
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
@@ -62,7 +64,10 @@ impl From<&Route> for ViewBuilder<HtmlElement> {
                     </main>
                 }
             },
-            Route::Login => builder!{<div><h1>"Login"</h1></div>},
+            Route::Login => {
+                let login_view = Gizmo::from(Login { name: "".to_string()});
+                return builder!{<main>{login_view.view_builder()}</main>}
+            }
             Route::Settings => builder!{<div><h1>"Settings"</h1></div>},
         }
     }

@@ -20,6 +20,7 @@ use crate::components::clock::Clock;
 use crate::components::nav::Nav;
 
 
+
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
 #[cfg(feature = "wee_alloc")]
@@ -33,6 +34,7 @@ struct App {
 #[derive(Clone)]
 enum AppModel {
     HashChange(String),
+    Mounted,
 }
 
 #[derive(Clone)]
@@ -62,8 +64,15 @@ impl Component for App {
     type ModelMsg = AppModel;
     type ViewMsg = AppView;
 
+    fn bind(&self, sub: &Subscriber<Self::ModelMsg>) {
+
+    }
+
     fn update(&mut self, msg: &AppModel, tx: &Transmitter<AppView>, _sub: &Subscriber<AppModel>) {
         match msg {
+            AppModel::Mounted => {
+                info!("Mounted!");
+            },
             AppModel::HashChange(hash) => {
                 match Route::try_from(hash.as_str()) {
                     Err(msg) => tx.send(&AppView::Error(msg)),
@@ -83,29 +92,22 @@ impl Component for App {
     }
 
     fn view(&self, tx: &Transmitter<AppModel>, rx: &Receiver<AppView>) -> ViewBuilder<HtmlElement> {
-        let style = css_in_rust::Style::create(
-            "App",
-            r#"
-            display: grid;
-            text-align: center;
-            background-color: #282c34;
-            align-content: center;
-        "#
-        );
         let c = Gizmo::from(Clock{ time: Utc::now() });
         let nav = Gizmo::from(Nav{ is_showing: false });
+        let t = tx.clone();
         builder!{
             <section
                 window:hashchange=tx.contra_filter_map(|ev:&Event| {
+                info!("has changed");
                     let hev = ev.dyn_ref::<HashChangeEvent>().unwrap().clone();
                     let hash = hev.new_url();
                     Some(AppModel::HashChange(hash))
                 })
                 patch:children=rx.branch_filter_map(AppView::patch_page)
-                class=style.unwrap().get_class_name()
+                class="app"
             >
                 {nav.view_builder()}
-                <main role="main">
+                <main role="main" class="main">
                     {c.view_builder()}
                 </main>
             </section>
@@ -118,8 +120,12 @@ impl Component for App {
 pub fn main() -> Result<(), JsValue> {
     panic::set_hook(Box::new(console_error_panic_hook::hook));
     console_log::init_with_level(Level::Trace).unwrap();
-
+    info!("is printing!");
     let gizmo = Gizmo::from(App{route: Route::Home});
+
+    let location_hash:String = window().location().hash().unwrap();
+    gizmo.trns.send(&AppModel::HashChange(location_hash));
+
     let view = View::from(gizmo.view_builder());
     view.run()
 }
