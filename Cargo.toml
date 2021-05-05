@@ -47,6 +47,7 @@ version = "0.3.48"
 features = [
   "HtmlInputElement",
   "HashChangeEvent",
+  "Document",
   "Element",
   "DomTokenList",
   "Event",

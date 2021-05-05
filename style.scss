@@ -7,6 +7,14 @@
 
 /*
 *
+*  Spectre
+*
+*/
+@import "node_modules/spectre.css/src/spectre";
+@import "node_modules/spectre.css/src/spectre-exp";
+
+/*
+*
 *  Theme
 *
 */
@@ -146,6 +154,7 @@ body {
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
 }
+
 /*
 *
 *  Clock
@@ -179,4 +188,26 @@ body {
   .morning {
     color: turquoise;
   }
+}
+
+/*
+*
+*  Login
+*
+*/
+.login {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  background-image: linear-gradient(to bottom, #f9929c, #e17c8a, #ca6678, #b35067, #9c3b57);
+}
+
+.info {
+  background-image: linear-gradient(to bottom, #71e3cd, #69dbc8, #60d2c2, #58cabd, #50c2b7);
+}
+
+.form {
+  background-image: linear-gradient(to bottom, #394c64, #33445a, #2d3c51, #273447, #212d3e);
 }

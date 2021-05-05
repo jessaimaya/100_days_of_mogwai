@@ -6,6 +6,9 @@ use web_sys::{HtmlElement, HtmlInputElement};
 use wasm_bindgen::{JsCast};
 use js_sys::{Function};
 
+use crate::components::login::*;
+use crate::components::carousel::*;
+
 pub struct Login {
     pub name: String,
 }
@@ -47,31 +50,22 @@ impl Component for Login {
     }
 
     fn view(&self, tx: &Transmitter<Self::ModelMsg>, rx: &Receiver<Self::ViewMsg>) -> ViewBuilder<Self::DomNode> {
-        info!("almost rendered");
-        builder!{
-            <div>
-                <h1>"Login"</h1>
-                <input
-                    cast:type=web_sys::HtmlInputElement
-                    id="name"
-                    type="text"
-                    autofocus="autofocuss"
-                    on:load = tx.contra_map(|_: &Event| {
-                        info!("input loaded!");
-                        LoginModelMsg::Init
-                    })
-                    // post:build = tx.contra_map(|el: &HtmlInputElement| {
-                       // info!("what is this: {:?}", el);
-                        // ModelMsg::NameEditing(el.clone())
-                    // })
-                    on:keyup= tx.contra_map(|e: &Event| {
-                        let target = e.target().unwrap();
-                        let input: &HtmlInputElement = target.unchecked_ref();
+        let carousel = Gizmo::from(Carousel {
+            current_slide: 0,
+            slides: vec![Slide{color: "#f00".to_string()}, Slide{color: "#0f0".to_string()}]
+        });
 
-                        info!("what is this: {:?}", input.value());
-                        LoginModelMsg::NameEditing(input.value())
-                    })
-                />
+        builder!{
+            <div class="login">
+                <div class="content">
+                    <div class="info">
+                    {carousel.view_builder()}
+                </div>
+                    <div class="form">
+
+                    </div>
+                </div>
+
             </div>
         }
     }

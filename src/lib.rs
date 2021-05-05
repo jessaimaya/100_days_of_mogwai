@@ -17,7 +17,7 @@ mod components;
 mod router;
 
 use crate::components::clock::Clock;
-use crate::components::nav::Nav;
+use crate::components::nav::{ Nav, NavModel };
 
 
 
@@ -94,11 +94,11 @@ impl Component for App {
     fn view(&self, tx: &Transmitter<AppModel>, rx: &Receiver<AppView>) -> ViewBuilder<HtmlElement> {
         let c = Gizmo::from(Clock{ time: Utc::now() });
         let nav = Gizmo::from(Nav{ is_showing: false });
-        let t = tx.clone();
+        let mut t_nav = nav.trns.clone();
+        let mut t = trns();
         builder!{
             <section
                 window:hashchange=tx.contra_filter_map(|ev:&Event| {
-                info!("has changed");
                     let hev = ev.dyn_ref::<HashChangeEvent>().unwrap().clone();
                     let hash = hev.new_url();
                     Some(AppModel::HashChange(hash))
@@ -107,7 +107,15 @@ impl Component for App {
                 class="app"
             >
                 {nav.view_builder()}
-                <main role="main" class="main">
+                <main
+                    role="main"
+                    class="main"
+                    on:click=t.contra_map(move |_:&Event| {
+                       info!("Clicking");
+
+                        t_nav.send(&NavModel::ShowHide);
+                    })
+                >
                     {c.view_builder()}
                 </main>
             </section>
