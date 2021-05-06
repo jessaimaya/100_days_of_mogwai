@@ -66,7 +66,7 @@ impl From<&Route> for ViewBuilder<HtmlElement> {
                 }
             },
             Route::Login => {
-                let login_view = Gizmo::from(Login { name: "".to_string()});
+                let login_view = Gizmo::from(Login::default());
                 return builder!{<main>{login_view.view_builder()}</main>}
             }
             Route::Settings => builder!{<div><h1>"Settings"</h1></div>},

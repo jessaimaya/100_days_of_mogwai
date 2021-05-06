@@ -8,9 +8,35 @@ use js_sys::{Function};
 
 use crate::components::login::*;
 use crate::components::carousel::*;
+use crate::components::login::slides::*;
 
 pub struct Login {
     pub name: String,
+    pub slides: Vec<Slide>
+}
+
+impl Default for Login {
+    fn default() -> Self {
+        Login {
+            name: "Nombre".to_string(),
+            slides: vec![
+                Slide{ text: "Plan your actvities and control your progress online.".to_string(), image: "/login/rocket.png".to_string()},
+                Slide{ text: "Plan your actvities 2 and control your progress online.".to_string(), image: "/login/startup.png".to_string()},
+                Slide{ text: "Plan your actvities 3 and control your progress online.".to_string(), image: "/login/startup.png".to_string()},
+            ]
+        }
+    }
+}
+
+impl Login {
+    fn gen_carousel(&self) -> ViewBuilder<HtmlElement> {
+        let slides = self.slides.iter().map(|s| s.get_view()).collect::<Vec<_>>();
+        let carousel = Carousel {
+            current_slide: 0,
+            slides
+        };
+        builder!{<div class="info">{carousel.get_carousel()}</div>}
+    }
 }
 
 #[derive(Clone)]
@@ -50,17 +76,12 @@ impl Component for Login {
     }
 
     fn view(&self, tx: &Transmitter<Self::ModelMsg>, rx: &Receiver<Self::ViewMsg>) -> ViewBuilder<Self::DomNode> {
-        let carousel = Gizmo::from(Carousel {
-            current_slide: 0,
-            slides: vec![Slide{color: "#f00".to_string()}, Slide{color: "#0f0".to_string()}]
-        });
+        let carousel = self.gen_carousel();
 
         builder!{
             <div class="login">
                 <div class="content">
-                    <div class="info">
-                    {carousel.view_builder()}
-                </div>
+                    {carousel}
                     <div class="form">
 
                     </div>

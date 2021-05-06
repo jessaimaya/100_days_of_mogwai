@@ -198,16 +198,46 @@ body {
 .login {
   display: flex;
   min-height: 100vh;
-  flex-direction: column;
   align-content: center;
   justify-content: center;
+  align-items: center;
   background-image: linear-gradient(to bottom, #f9929c, #e17c8a, #ca6678, #b35067, #9c3b57);
 }
 
+.content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  height: 80vh;
+  max-width: 85vw;
+  flex-direction: row;
+}
+
 .info {
-  background-image: linear-gradient(to bottom, #71e3cd, #69dbc8, #60d2c2, #58cabd, #50c2b7);
+  display: flex;
+  flex: 1;
+  align-content: center;
+  justify-content: center;
 }
 
 .form {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   background-image: linear-gradient(to bottom, #394c64, #33445a, #2d3c51, #273447, #212d3e);
 }
+
+.carousel-item {
+  flex: 1;
+  color: white;
+  display: flex;
+  padding: 3rem;
+  align-content: center;
+  justify-content: center;
+  flex-direction: column;
+  background-image: linear-gradient(to bottom, #71e3cd, #69dbc8, #60d2c2, #58cabd, #50c2b7);
+  & img {
+    width: 50%;
+    margin: 2rem auto 0;
+  }
+ }
