@@ -211,6 +211,9 @@ body {
   height: 80vh;
   max-width: 85vw;
   flex-direction: row;
+  border-radius: 1rem;
+  -webkit-box-shadow: 3px 1px 30px 13px rgba(0,0,0,0.1);
+  box-shadow: 3px 1px 30px 13px rgba(0,0,0,0.1);
 }
 
 .info {
@@ -218,13 +221,51 @@ body {
   flex: 1;
   align-content: center;
   justify-content: center;
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
 }
 
 .form {
   display: flex;
   flex: 1;
+  z-index: 2;
   flex-direction: column;
   background-image: linear-gradient(to bottom, #394c64, #33445a, #2d3c51, #273447, #212d3e);
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  -webkit-box-shadow: -9px 2px 30px 8px rgba(0,0,0,0.3);
+  box-shadow: -9px 2px 30px 8px rgba(0,0,0,0.3);
+}
+
+.form-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  padding: 3rem;
+  flex-direction: column;
+
+  & .heading {
+    color: #425267;
+    & .middle {
+      font-size: 1.5rem;
+      margin: 0 0.5rem;
+    }
+    & .op {
+      font-weight: normal;
+      cursor: pointer;
+      &.active {
+        color: #CCCFD5;
+        text-decoration: underline;
+        text-decoration-color: #50c2b7;
+      }
+    }
+  }
+}
+
+.carousel {
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
 }
 
 .carousel-item {

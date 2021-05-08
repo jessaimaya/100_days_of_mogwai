@@ -9,6 +9,7 @@ use js_sys::{Function};
 use crate::components::login::*;
 use crate::components::carousel::*;
 use crate::components::login::slides::*;
+use crate::components::login::form::*;
 
 pub struct Login {
     pub name: String,
@@ -20,9 +21,9 @@ impl Default for Login {
         Login {
             name: "Nombre".to_string(),
             slides: vec![
-                Slide{ text: "Plan your actvities and control your progress online.".to_string(), image: "/login/rocket.png".to_string()},
-                Slide{ text: "Plan your actvities 2 and control your progress online.".to_string(), image: "/login/startup.png".to_string()},
-                Slide{ text: "Plan your actvities 3 and control your progress online.".to_string(), image: "/login/startup.png".to_string()},
+                Slide{ text: "Plan your activities and control your progress online.".to_string(), image: "/login/rocket.png".to_string()},
+                Slide{ text: "Mogwai is awesome! I'd be lost without Mogwai.".to_string(), image: "/login/constellation.png".to_string()},
+                Slide{ text: "I don't always clop, but when I do, it's because of Mogwai".to_string(), image: "/login/planet.png".to_string()},
             ]
         }
     }
@@ -35,7 +36,11 @@ impl Login {
             current_slide: 0,
             slides
         };
-        builder!{<div class="info">{carousel.get_carousel()}</div>}
+        builder! {<div class="info">{carousel.get_carousel()}</div>}
+    }
+    fn gen_form(&self) -> ViewBuilder<HtmlElement> {
+        let form = Gizmo::from(LoginForm::default());
+        builder!{<div class="form">{form.view_builder()}</div>}
     }
 }
 
@@ -77,14 +82,13 @@ impl Component for Login {
 
     fn view(&self, tx: &Transmitter<Self::ModelMsg>, rx: &Receiver<Self::ViewMsg>) -> ViewBuilder<Self::DomNode> {
         let carousel = self.gen_carousel();
-
+        let form = self.gen_form();
+        // let form = Gizmo::from(LoginForm::default());
         builder!{
             <div class="login">
                 <div class="content">
                     {carousel}
-                    <div class="form">
-
-                    </div>
+                    {form}
                 </div>
 
             </div>
