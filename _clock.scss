@@ -1,0 +1,34 @@
+/*
+*
+*  Clock
+*
+*/
+
+.clock {
+  text-align: center;
+  background: $black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  p {
+    color: white;
+  }
+  .greet {
+    color: white;
+    margin: 0;
+    & span {
+      text-transform: capitalize;
+    }
+  }
+  .evening {
+    color: purple;
+  }
+  .afternoon {
+    color: yellow;
+  }
+  .morning {
+    color: turquoise;
+  }
+}

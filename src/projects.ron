@@ -1,0 +1,7 @@
+Projects(
+    Home: {
+        paths: ["#/"],
+        name: "Home",
+        container: "Home",
+    }
+)

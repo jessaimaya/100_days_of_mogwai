@@ -16,8 +16,6 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 #[derive(Clone, Debug, PartialEq)]
 pub enum Route {
     Home,
-    Login,
-    Settings,
 }
 
 impl TryFrom<&str> for Route {
@@ -37,8 +35,6 @@ impl TryFrom<&str> for Route {
         match paths.as_slice() {
             [""] => Ok(Route::Home),
             ["", ""] => Ok(Route::Home),
-            ["", "Login"] => Ok(Route::Login),
-            ["", "settings"] => Ok(Route::Settings),
             r => Err(format!("unsupported route: {:?}", r)),
         }
     }
@@ -48,8 +44,6 @@ impl From<Route> for String {
     fn from(route: Route) -> String {
         match route {
             Route::Home => "#/".into(),
-            Route::Login => "#/Login".into(),
-            Route::Settings=> "#/settings".into(),
         }
     }
 }
@@ -64,13 +58,8 @@ impl From<&Route> for ViewBuilder<HtmlElement> {
                         {c.view_builder()}
                     </main>
                 }
-            },
-            Route::Login => {
-                let login_view = Gizmo::from(Login::default());
-                return builder!{<main>{login_view.view_builder()}</main>}
             }
-            Route::Settings => builder!{<div><h1>"Settings"</h1></div>},
-        }
+        };
     }
 }
 
