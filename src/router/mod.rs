@@ -12,10 +12,14 @@ use crate::containers::login::Login;
 #[cfg(feature = "weee_alloc")]
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+use log::info;
+
+use crate::containers::*;
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum Route {
     Home,
+    RandomMealGenerator,
 }
 
 impl TryFrom<&str> for Route {
@@ -31,10 +35,10 @@ impl TryFrom<&str> for Route {
 
         let paths: Vec<&str> = after_hash.split("/").collect::<Vec<_>>();
         trace!("route paths: {:?}", paths);
-
         match paths.as_slice() {
             [""] => Ok(Route::Home),
             ["", ""] => Ok(Route::Home),
+            ["","random-meal-generator"] => Ok(Route::RandomMealGenerator),
             r => Err(format!("unsupported route: {:?}", r)),
         }
     }
@@ -44,6 +48,7 @@ impl From<Route> for String {
     fn from(route: Route) -> String {
         match route {
             Route::Home => "#/".into(),
+            Route::RandomMealGenerator => "#/random-meal-generator".into(),
         }
     }
 }
@@ -51,19 +56,14 @@ impl From<Route> for String {
 impl From<&Route> for ViewBuilder<HtmlElement> {
     fn from(route: &Route) -> Self {
         match route {
-            Route::Home => {
-                let c = Gizmo::from(Clock{time: Utc::now()});
-                return builder!{
-                    <main>
-                        {c.view_builder()}
-                    </main>
-                }
-            }
-        };
+            Route::Home => builder!{<h2>"Soy home"</h2>},
+            Route::RandomMealGenerator => Gizmo::from(random_meal_generator::RandomMealGenerator{ num_clicks: 0 }).view_builder()
+        }
     }
 }
+    // return
 
-impl From<&Route> for View<HtmlElement> {
+    impl From<&Route> for View<HtmlElement> {
     fn from(route: &Route) -> Self {
         ViewBuilder::from(route).into()
     }
