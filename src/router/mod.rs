@@ -1,3 +1,4 @@
+#![allow(warnings)]
 #![allow(unused_braces)]
 use log::{trace, Level};
 use mogwai::prelude::*;
@@ -15,6 +16,7 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 use log::info;
 
 use crate::containers::*;
+use crate::router::Route::RandomMealGenerator;
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum Route {
@@ -57,7 +59,9 @@ impl From<&Route> for ViewBuilder<HtmlElement> {
     fn from(route: &Route) -> Self {
         match route {
             Route::Home => builder!{<h2>"Soy home"</h2>},
-            Route::RandomMealGenerator => Gizmo::from(random_meal_generator::RandomMealGenerator{ num_clicks: 0 }).view_builder()
+            Route::RandomMealGenerator => Gizmo::from(
+                random_meal_generator::RandomMealGenerator::default()
+            ).view_builder()
         }
     }
 }

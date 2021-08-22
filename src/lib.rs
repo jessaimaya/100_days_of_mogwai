@@ -1,3 +1,4 @@
+#![allow(warnings)]
 use log::{Level};
 use log::info;
 use mogwai::prelude::*;

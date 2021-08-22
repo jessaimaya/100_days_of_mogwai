@@ -1,0 +1,42 @@
+/*
+*
+* Sanitize
+*
+*/
+@import url(../node_modules/sanitize.css);
+
+/*
+*
+*  Spectre
+*
+*/
+@import "../node_modules/spectre.css/src/spectre";
+@import "../node_modules/spectre.css/src/spectre-exp";
+
+/*
+*
+*  Theme
+*
+*/
+$black: #282c34;
+
+/*
+*
+*  Global
+*
+*/
+* {
+  box-sizing: border-box;
+  font-family: 'Montserrat Alternates', sans-serif;
+}
+
+body {
+ font-size: calc(10px + 2vmin);
+}
+/*
+*
+* App
+*
+*/
+@import "_nav";
+@import "_random_meal_generator";
