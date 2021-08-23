@@ -4,13 +4,6 @@ use log::info;
 use mogwai::prelude::*;
 
 #[derive(Clone)]
-pub enum AppState {
-    Init,
-    Fetch,
-    Render
-}
-
-#[derive(Clone)]
 pub struct Recipe {}
 
 #[derive(Clone)]
@@ -21,20 +14,19 @@ pub enum In {
 }
 #[derive(Clone)]
 pub enum Out {
-    CurrentState(AppState),
-    // PatchItem(Patch<ViewBuilder<HtmlElement>>),
+    CurrentState(In),
 }
 #[derive(Clone)]
 pub struct RandomMealGenerator {
     recipe: Option<Recipe>,
-    state: AppState
+    state: In
 }
 
 impl Default for RandomMealGenerator {
     fn default() -> Self {
         RandomMealGenerator{
             recipe: None,
-            state: AppState::Init,
+            state: In::Initial,
         }
     }
 }
@@ -44,19 +36,17 @@ impl Component for RandomMealGenerator {
     type ViewMsg = Out;
     type DomNode = HtmlElement;
 
-    fn update(&mut self, msg: &In, tx_view: &Transmitter<Out>, sub: &Subscriber<In>) {
+    fn update(&mut self, msg: &In, tx_view: &Transmitter<Out>, _sub: &Subscriber<In>) {
+        self.state = msg.clone();
         match msg {
-            In::Initial => {
-                self.state = AppState::Init;
-                tx_view.send(&Out::CurrentState(self.state.clone()));
+            In::Initial  => {
+                tx_view.send(&Out::CurrentState(self.state.to_owned()));
             },
             In::FetchRecipe => {
-                self.state = AppState::Fetch;
-                tx_view.send(&Out::CurrentState(self.state.clone()));
+                tx_view.send(&Out::CurrentState(self.state.to_owned()));
             },
             In::DisplayRecipe => {
-                self.state = AppState::Render;
-                tx_view.send(&Out::CurrentState(self.state.clone()));
+                tx_view.send(&Out::CurrentState(self.state.to_owned()));
             }
         }
     }
@@ -67,9 +57,9 @@ impl Component for RandomMealGenerator {
             <section class="wrapper">
                 <div class="rmg" patch:children=rx.branch_map(move |Out::CurrentState(st)|
                     Patch::Replace{value: match st {
-                    AppState::Init => init_view(&new_tx),
-                    AppState::Fetch => fetching_view(&new_tx),
-                    AppState::Render => display_recipe(&new_tx)
+                        In::Initial => init_view(&new_tx),
+                        In::FetchRecipe => fetching_view(&new_tx),
+                        In::DisplayRecipe => display_recipe(&new_tx)
                     }, index: 0}.clone()
                 )>
                     {init_view(&tx)}
