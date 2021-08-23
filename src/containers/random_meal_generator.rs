@@ -51,12 +51,10 @@ impl Component for RandomMealGenerator {
                 tx_view.send(&Out::CurrentState(self.state.clone()));
             },
             In::FetchRecipe => {
-                // tx_view.send(&Out::PatchItem(Patch::Replace { value: fetching_view(), index:0 }));
                 self.state = AppState::Fetch;
                 tx_view.send(&Out::CurrentState(self.state.clone()));
             },
             In::DisplayRecipe => {
-                //tx_view.send(&Out::PatchItem(Patch::Replace {value: display_recipe(), index:0 }))
                 self.state = AppState::Render;
                 tx_view.send(&Out::CurrentState(self.state.clone()));
             }
@@ -67,22 +65,13 @@ impl Component for RandomMealGenerator {
         let new_tx = tx.clone();
         builder!{
             <section class="wrapper">
-                <div class="rmg" patch:children=rx.branch_map(move |Out::CurrentState(st)| {
-                    match st {
-                        AppState::Init => {
-                            let patch = Patch::Replace{value: init_view(&new_tx), index: 0};
-                            patch.clone()
-                        },
-                        AppState::Fetch => {
-                            let patch = Patch::Replace{value: fetching_view(&new_tx), index: 0};
-                            patch.clone()
-                        },
-                        AppState::Render => {
-                            let patch = Patch::Replace{value: display_recipe(&new_tx), index: 0};
-                            patch.clone()
-                        }
-                    }
-                })>
+                <div class="rmg" patch:children=rx.branch_map(move |Out::CurrentState(st)|
+                    Patch::Replace{value: match st {
+                    AppState::Init => init_view(&new_tx),
+                    AppState::Fetch => fetching_view(&new_tx),
+                    AppState::Render => display_recipe(&new_tx)
+                    }, index: 0}.clone()
+                )>
                     {init_view(&tx)}
                 </div>
                 <div class="footnotes">
