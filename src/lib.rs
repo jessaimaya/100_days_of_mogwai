@@ -1,26 +1,24 @@
 #![allow(warnings)]
-use log::{Level};
+use chrono::prelude::*;
 use log::info;
+use log::Level;
 use mogwai::prelude::*;
 use std::panic;
 use wasm_bindgen::prelude::*;
-use chrono::prelude::*;
 use web_sys::HashChangeEvent;
 
-use std::time::{Duration, Instant};
-use std::thread::sleep;
-use crate::AppView::PatchPage;
 use crate::router::Route;
+use crate::AppView::PatchPage;
+use std::thread::sleep;
+use std::time::{Duration, Instant};
 
-mod theme;
-mod containers;
 mod components;
+mod containers;
 mod router;
+mod theme;
 mod utility;
 
 use crate::components::nav::nav_view;
-
-
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
@@ -65,35 +63,31 @@ impl Component for App {
     type ModelMsg = AppModel;
     type ViewMsg = AppView;
 
-    fn bind(&self, sub: &Subscriber<Self::ModelMsg>) {
-
-    }
+    fn bind(&self, sub: &Subscriber<Self::ModelMsg>) {}
 
     fn update(&mut self, msg: &AppModel, tx: &Transmitter<AppView>, _sub: &Subscriber<AppModel>) {
         match msg {
             AppModel::Mounted => {
                 info!("Mounted!");
-            },
-            AppModel::HashChange(hash) => {
-                match Route::try_from(hash.as_str()) {
-                    Err(msg) => tx.send(&AppView::Error(msg)),
-                    Ok(route) => {
-                        if route != self.route {
-                            let view = View::from(ViewBuilder::from(&route));
-                            self.route = route;
-                            tx.send(&AppView::PatchPage(Patch::Replace {
-                                index: 1,
-                                value: view,
-                            }));
-                        }
+            }
+            AppModel::HashChange(hash) => match Route::try_from(hash.as_str()) {
+                Err(msg) => tx.send(&AppView::Error(msg)),
+                Ok(route) => {
+                    if route != self.route {
+                        let view = View::from(ViewBuilder::from(&route));
+                        self.route = route;
+                        tx.send(&AppView::PatchPage(Patch::Replace {
+                            index: 1,
+                            value: view,
+                        }));
                     }
                 }
-            }
+            },
         }
     }
 
     fn view(&self, tx: &Transmitter<AppModel>, rx: &Receiver<AppView>) -> ViewBuilder<HtmlElement> {
-        builder!{
+        builder! {
             <section
                 window:hashchange=tx.contra_filter_map(|ev:&Event| {
                     let hev = ev.dyn_ref::<HashChangeEvent>().unwrap().clone();
@@ -116,9 +110,9 @@ pub fn main() -> Result<(), JsValue> {
     panic::set_hook(Box::new(console_error_panic_hook::hook));
     console_log::init_with_level(Level::Trace).unwrap();
     info!("is printing!");
-    let gizmo = Gizmo::from(App{route: Route::Home});
+    let gizmo = Gizmo::from(App { route: Route::Home });
 
-    let location_hash:String = window().location().hash().unwrap();
+    let location_hash: String = window().location().hash().unwrap();
     gizmo.trns.send(&AppModel::HashChange(location_hash));
 
     let view = View::from(gizmo.view_builder());

@@ -1,12 +1,12 @@
 #![allow(warnings)]
 #![allow(unused_braces)]
+use crate::components::clock::Clock;
+use chrono::Utc;
 use log::{trace, Level};
 use mogwai::prelude::*;
 use std::panic;
 use wasm_bindgen::prelude::*;
 use web_sys::HashChangeEvent;
-use crate::components::clock::Clock;
-use chrono::Utc;
 
 use crate::containers::login::Login;
 
@@ -30,7 +30,7 @@ impl TryFrom<&str> for Route {
     fn try_from(s: &str) -> Result<Self, Self::Error> {
         trace!("route try_from: {}", s);
         let hash_split = s.split("#").collect::<Vec<_>>();
-        let after_hash = match hash_split.as_slice(){
+        let after_hash = match hash_split.as_slice() {
             [_, after] => Ok(after),
             _ => Err(format!("route must have a hash: {}", s)),
         }?;
@@ -40,7 +40,7 @@ impl TryFrom<&str> for Route {
         match paths.as_slice() {
             [""] => Ok(Route::Home),
             ["", ""] => Ok(Route::Home),
-            ["","random-meal-generator"] => Ok(Route::RandomMealGenerator),
+            ["", "random-meal-generator"] => Ok(Route::RandomMealGenerator),
             r => Err(format!("unsupported route: {:?}", r)),
         }
     }
@@ -58,16 +58,16 @@ impl From<Route> for String {
 impl From<&Route> for ViewBuilder<HtmlElement> {
     fn from(route: &Route) -> Self {
         match route {
-            Route::Home => builder!{<h2>"Soy home"</h2>},
-            Route::RandomMealGenerator => Gizmo::from(
-                random_meal_generator::RandomMealGenerator::default()
-            ).view_builder()
+            Route::Home => builder! {<h2>"Soy home"</h2>},
+            Route::RandomMealGenerator => {
+                Gizmo::from(random_meal_generator::RandomMealGenerator::default()).view_builder()
+            }
         }
     }
 }
-    // return
+// return
 
-    impl From<&Route> for View<HtmlElement> {
+impl From<&Route> for View<HtmlElement> {
     fn from(route: &Route) -> Self {
         ViewBuilder::from(route).into()
     }

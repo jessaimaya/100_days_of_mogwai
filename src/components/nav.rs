@@ -2,7 +2,7 @@ use mogwai::prelude::*;
 use web_sys::HtmlElement;
 
 pub fn nav_view() -> ViewBuilder<HtmlElement> {
-    let view_builder:ViewBuilder<HtmlElement> = builder!{
+    let view_builder: ViewBuilder<HtmlElement> = builder! {
         <header class="navbar">
             <section class="navbar-section">
                 <a href="#/" title="Home" class="logo">

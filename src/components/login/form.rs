@@ -1,6 +1,6 @@
+use crate::containers::login::LoginViewMsg;
 use log::info;
 use mogwai::prelude::*;
-use crate::containers::login::LoginViewMsg;
 
 #[derive(Clone, Debug)]
 enum SignFormType {
@@ -14,12 +14,12 @@ struct SignUp {}
 
 #[derive(Clone)]
 pub enum In {
-    Show(SignFormType)
+    Show(SignFormType),
 }
 
 #[derive(Clone)]
 pub enum Out {
-    Show(SignFormType)
+    Show(SignFormType),
 }
 
 pub struct LoginForm {
@@ -31,8 +31,8 @@ pub struct LoginForm {
 impl Default for LoginForm {
     fn default() -> Self {
         LoginForm {
-            sign_in: SignIn{},
-            sign_up: SignUp{},
+            sign_in: SignIn {},
+            sign_up: SignUp {},
             showing: SignFormType::In,
         }
     }
@@ -40,7 +40,7 @@ impl Default for LoginForm {
 
 impl LoginForm {
     fn get_heading(&self, tx: Transmitter<In>, rx: Receiver<Out>) -> ViewBuilder<HtmlElement> {
-        let heading = builder!{
+        let heading = builder! {
             <h1 class="heading">
                 <span
                     class={(
@@ -78,11 +78,11 @@ impl LoginForm {
     }
 
     fn get_sign_up_form(&self) -> ViewBuilder<HtmlElement> {
-        builder!{<form><label>"Sign up form"</label></form>}
+        builder! {<form><label>"Sign up form"</label></form>}
     }
 
     fn get_sign_in_form(&self) -> ViewBuilder<HtmlElement> {
-        builder!{<form><label>"Sign in form"</label></form>}
+        builder! {<form><label>"Sign in form"</label></form>}
     }
     /*
     fn get_form(&self, tx: Transmitter<In>, rx: Receiver<Out>) -> ViewBuilder<HtmlElement> {
@@ -106,19 +106,24 @@ impl Component for LoginForm {
     type ViewMsg = Out;
     type DomNode = HtmlElement;
 
-    fn update(&mut self, msg: &Self::ModelMsg, tx_view: &Transmitter<Self::ViewMsg>, sub: &Subscriber<Self::ModelMsg>) {
+    fn update(
+        &mut self,
+        msg: &Self::ModelMsg,
+        tx_view: &Transmitter<Self::ViewMsg>,
+        sub: &Subscriber<Self::ModelMsg>,
+    ) {
         match msg {
             In::Show(form_type) => {
                 self.showing = form_type.clone();
                 tx_view.send(&Out::Show(self.showing.clone()))
-            },
+            }
         }
     }
 
     fn view(&self, tx: &Transmitter<In>, rx: &Receiver<Out>) -> ViewBuilder<Self::DomNode> {
         let heading = self.get_heading(tx.clone(), rx.clone());
         // let form = self.get_form(tx.clone(), rx.clone());
-        builder!{
+        builder! {
             <div class="form-content">
             {heading}
             // {form}

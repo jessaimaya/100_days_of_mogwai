@@ -1,16 +1,16 @@
+use chrono::prelude::*;
 use log::info;
 use mogwai::prelude::*;
-use chrono::prelude::*;
 use std::ops::Sub;
 
 #[derive(Clone)]
 pub enum In {
-    Tick
+    Tick,
 }
 
 #[derive(Clone)]
 pub enum Out {
-    Time(DateTime<Utc>)
+    Time(DateTime<Utc>),
 }
 
 pub struct Clock {
@@ -22,7 +22,12 @@ impl Component for Clock {
     type ViewMsg = Out;
     type DomNode = HtmlElement;
 
-    fn update(&mut self, msg: &Self::ModelMsg, tx_view: &Transmitter<Self::ViewMsg>, sub: &Subscriber<Self::ModelMsg>) {
+    fn update(
+        &mut self,
+        msg: &Self::ModelMsg,
+        tx_view: &Transmitter<Self::ViewMsg>,
+        sub: &Subscriber<Self::ModelMsg>,
+    ) {
         match msg {
             In::Tick => {
                 self.time = Utc::now();
@@ -31,23 +36,28 @@ impl Component for Clock {
         }
     }
 
-    fn view(&self, tx: &Transmitter<Self::ModelMsg>, rx: &Receiver<Self::ViewMsg>) -> ViewBuilder<Self::DomNode> {
-
+    fn view(
+        &self,
+        tx: &Transmitter<Self::ModelMsg>,
+        rx: &Receiver<Self::ViewMsg>,
+    ) -> ViewBuilder<Self::DomNode> {
         let new_tx = tx.clone();
         mogwai::utils::timeout(1000, move || {
             new_tx.send(&In::Tick);
             true
         });
 
-        let date_to_string = |time: DateTime<Utc>| format!(
-            "{day_name_and_month} {day_number} {year}, {time_with_am}",
-             day_name_and_month = time.format("%A, %B").to_string(),
-             day_number = nth_day(time.day()),
-             year = time.year(),
-             time_with_am = time.format("%T %P")
-        );
+        let date_to_string = |time: DateTime<Utc>| {
+            format!(
+                "{day_name_and_month} {day_number} {year}, {time_with_am}",
+                day_name_and_month = time.format("%A, %B").to_string(),
+                day_number = nth_day(time.day()),
+                year = time.year(),
+                time_with_am = time.format("%T %P")
+            )
+        };
 
-        let greet = |time:DateTime<Utc>| {
+        let greet = |time: DateTime<Utc>| {
             let split_afternoon = 12;
             let split_evening = 17;
             let current_hour = time.format("%H").to_string().parse::<i32>().unwrap_or(0);
@@ -67,7 +77,7 @@ impl Component for Clock {
         });
         /// For testing purpose, we can pass a custom timestamp
         /// let fake:DateTime<Utc> = DateTime::from_utc(NaiveDateTime::from_timestamp(1615473738, 0), Utc);
-        builder!{
+        builder! {
             <div class="clock">
                 <p class="greet">"Good "<span class={greet_msg.clone()}>{("Time!", greet_msg)}</span></p>
                 <p class="date" >{("loading...", date_string)}</p>
@@ -80,7 +90,7 @@ fn nth_day(d: u32) -> String {
     let j = d % 10;
     let k = d % 100;
     if j == 1 && k != 11 {
-         return format!("{}st", d.to_string());
+        return format!("{}st", d.to_string());
     }
     if j == 2 && k != 12 {
         return format!("{}nd", d.to_string());

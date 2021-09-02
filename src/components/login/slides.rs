@@ -7,7 +7,7 @@ pub struct Slide {
 
 impl Slide {
     pub fn get_view(&self) -> ViewBuilder<HtmlElement> {
-        builder!{
+        builder! {
             <figure class="carousel-item">
                 <h2 class="login-carousel-slide">{self.text.clone()}</h2>
                 <img src={self.image.clone()} alt={self.text.clone()}/>

@@ -1,15 +1,15 @@
-use log::{Level};
 use log::info;
+use log::Level;
 use serde::{Deserialize, Serialize};
+use std::fmt::Debug;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use wasm_bindgen_futures::JsFuture;
-use std::fmt::Debug;
 use web_sys::{Request, RequestInit, RequestMode, Response};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Recipe {
-    pub meals: Vec<Meal>
+    pub meals: Vec<Meal>,
 }
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
@@ -38,8 +38,10 @@ impl Default for Recipe {
                 str_area: "British".to_string(),
                 str_category: "Beef".to_string(),
                 str_meal: "British beef".to_string(),
-                str_source: "https://www.bbcgoodfood.com/recipes/164622/bubble-and-squeak".to_string(),
-                str_meal_thumb: "https://www.themealdb.com/images/media/meals/xusqvw1511638311.jpg".to_string(),
+                str_source: "https://www.bbcgoodfood.com/recipes/164622/bubble-and-squeak"
+                    .to_string(),
+                str_meal_thumb: "https://www.themealdb.com/images/media/meals/xusqvw1511638311.jpg"
+                    .to_string(),
                 str_ingredient1: Some("ingredient 1".to_string()),
                 str_ingredient2: Some("ingredient 2".to_string()),
                 str_ingredient3: Some("ingredient 3".to_string()),
@@ -50,11 +52,10 @@ impl Default for Recipe {
                 str_measure3: Some("400 g".to_string()),
                 str_measure4: Some("400 g".to_string()),
                 str_measure5: Some("400 g".to_string()),
-            }]
+            }],
         }
     }
 }
-
 
 pub async fn fetch(url: String, meth: String) -> Result<Recipe, JsValue> {
     let mut opts = RequestInit::new();
@@ -62,17 +63,17 @@ pub async fn fetch(url: String, meth: String) -> Result<Recipe, JsValue> {
     opts.mode(RequestMode::Cors);
 
     let request = Request::new_with_str_and_init(&url, &opts)?;
-    request.headers().set("Accept","application/json");
+    request.headers().set("Accept", "application/json");
 
     let win = web_sys::window().expect("Couldn't get window object");
-    let resp_value =  JsFuture::from(win.fetch_with_request(&request)).await?;
+    let resp_value = JsFuture::from(win.fetch_with_request(&request)).await?;
 
     assert!(resp_value.is_instance_of::<Response>());
 
     let resp: Response = resp_value.dyn_into().unwrap();
     let json = JsFuture::from(resp.json()?).await?;
     info!("json: {:?}", &json);
-    let branch_info: Recipe= json.into_serde().expect("Couldn't serialize into T");
+    let branch_info: Recipe = json.into_serde().expect("Couldn't serialize into T");
     info!("obj: {:?}", &branch_info);
     //Ok(JsValue::from_serde(&branch_info).unwrap())
     Ok(branch_info)

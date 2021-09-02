@@ -15,11 +15,14 @@ pub struct ColTheme {
 impl std::default::Default for ThemeApp {
     fn default() -> Self {
         ThemeApp {
-            background: ColTheme{ light: rgb(16, 17, 20), dark: rgb(16, 17, 20)},
+            background: ColTheme {
+                light: rgb(16, 17, 20),
+                dark: rgb(16, 17, 20),
+            },
         }
     }
 }
 
 lazy_static! {
-    pub static ref THEME:ThemeApp = ThemeApp::default();
+    pub static ref THEME: ThemeApp = ThemeApp::default();
 }
