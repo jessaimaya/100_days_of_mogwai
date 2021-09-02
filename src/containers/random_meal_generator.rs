@@ -131,6 +131,12 @@ fn display_recipe(tx:&Transmitter<In>, recipe_resp: Option<Recipe>) -> ViewBuild
             let recipe = &recipe.meals[0];
             builder!(
                      <div class="rmg__fold">
+                        <button
+                            class="refresh"
+                            on:click=tx.contra_map(|_| In::FetchRecipe)
+                        >
+                            <i class="fa fa-random"></i>
+                        </button>
             <section class="recipe">
                 <div class="recipe__image">
                     <img src={&recipe.str_meal_thumb} alt={&recipe.str_meal} />
