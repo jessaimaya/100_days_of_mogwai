@@ -16,6 +16,7 @@ mod theme;
 mod containers;
 mod components;
 mod router;
+mod utility;
 
 use crate::components::nav::nav_view;
 
