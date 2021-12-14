@@ -57,11 +57,11 @@ impl From<Route> for String {
 
 impl From<&Route> for ViewBuilder<HtmlElement> {
     fn from(route: &Route) -> Self {
+
+        let tpl = Gizmo::from(random_meal_generator::RandomMealGenerator::default()).view_builder();
         match route {
-            Route::Home => builder! {<h2>"Soy home"</h2>},
-            Route::RandomMealGenerator => {
-                Gizmo::from(random_meal_generator::RandomMealGenerator::default()).view_builder()
-            }
+            Route::Home => tpl,
+            Route::RandomMealGenerator => tpl
         }
     }
 }

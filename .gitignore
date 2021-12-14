@@ -3,3 +3,5 @@
 /pkg
 /dist
 /node_modules
+tags
+./tags
